@@ -1,7 +1,7 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import css from "./ContactForm.module.css";
-import { addContact } from "../../redux/contactsSlice";
+import { addContact } from "../../redux/contactsOps";
 import { useDispatch } from "react-redux";
 
 export default function ContactForm() {
@@ -12,16 +12,13 @@ export default function ContactForm() {
       .max(50, "Too long!")
       .required("Required!"),
     number: Yup.string()
-      .matches(
-        /^\d{3}-\d{2}-\d{2}$/,
-        "Phone number must be in the format ***-**-**"
-      )
       .min(3, "Too short!")
       .max(50, "Too long!")
       .required("Required!"),
   });
-  const formSubmit = (value) => {
+  const formSubmit = (value, actions) => {
     dispatch(addContact(value));
+    actions.resetForm();
   };
   return (
     <Formik
